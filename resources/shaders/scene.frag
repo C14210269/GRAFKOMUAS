@@ -1,52 +1,39 @@
+//#version 330
+////vec4 itu buat awarna
+//uniform vec4 uni_color;
+//out vec4 frag_color;
+//void main() {
+//    //    frag_color = vec4 (1.0,0.0,0.0,1.0);
+//    //  warna buat segitiga bisa sama kyk di main
+//    frag_color = uni_color;
+//}
+
+//shading 1
+
 #version 330
-//Directional Light
-struct DirLight{
-    vec3 direction;
+uniform vec4 uni_color; // nyesuain sama yg di main ntar vec4 karena tipe data colornya vector 4
+// out ngelempar variable yang ada di sini keluar
+out vec4 frag_color;
+// kalo in itu berharap masuk dari vert
 
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-};
-uniform DirLight dirLight;
-out vec4 fragColor;
-uniform vec4 uni_color;
-
-uniform vec3 viewPos;
-
+uniform vec3 lightColor;
+uniform vec3 lightPos;
 in vec3 Normal;
 in vec3 FragPos;
 
-vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir){
-    vec3 lightDir = normalize(-light.direction);
+void main(){
+    //    frag_color = vec4(1.0, 0.0, 0.0, 1.0);
+    //    frag_color = uni_color;
+    // ambient biasanya < 0.5f
+    float ambientStrength = 0.5f;
+    vec3 ambient = ambientStrength * lightColor;
 
-    //diffuse
-    float diff = max(dot(normal,lightDir),0.0);
-//    //specular
-//    vec3 reflectDir = reflect(-lightDir,normal);
-//    float spec = pow(max(dot(viewDir, reflectDir),0.0),64);
+    // diffuse
+    vec3 lightDirection = normalize(lightPos - FragPos);
+    float diff = max(dot(Normal, lightDirection), 0.0);
+    vec3 diffuse = diff * lightColor;
 
-    //bing pong
-    vec3 halfwayDir = normalize(lightDir + viewDir);
-    float spec = pow(max(dot(normal, halfwayDir),0.0),64*3);
+    vec3 result = (ambient+diffuse) * vec3(uni_color);
 
-    vec3 ambient = light.ambient;
-    vec3 diffuse = light.diffuse * diff;
-    vec3 specular = light.specular * spec;
-    return(ambient + diffuse + specular);
-}
-
-void main()
-{
-    //properties
-    vec3 normal = normalize(Normal);
-    vec3 viewDir = normalize(viewPos - FragPos);
-
-    //binh pong
-
-
-    //Directional Light
-    vec3 result = CalcDirLight(dirLight,normal,viewDir);
-
-
-    fragColor = vec4(result * vec3(uni_color),1.0);
+    frag_color = vec4(result, 1.0);
 }

@@ -18,7 +18,7 @@ import static org.lwjgl.opengl.GL30.*;
 public class Main {
     private Window window =
             new Window
-    (800,800,"Hello World");
+    (1600,1600,"Hello World");
     private ArrayList<Object> objects
             = new ArrayList<>();
     private ArrayList<Object> objectsRectangle
@@ -35,29 +35,51 @@ public class Main {
         window.init();
         GL.createCapabilities();
         mouseInput = window.getMouseInput();
-        camera.setPosition(0,0,1.0f);
+        camera.setPosition(0,2f,1.0f);
         camera.setRotation((float)Math.toRadians(0.0f),(float)Math.toRadians(30.0f));
 
-//        objects.add(new ObjLoader(
-//                Arrays.asList(
-//                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
-//                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
-//                ),
-//                new ArrayList<>(),
-//                new Vector4f(1.0f,0.0f,0.0f,1.0f),
-//                "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\skybox.obj"
-//        ));
-//        objects.get(0).scaleObject(0.3f,0.3f,0.3f);
+//skybox    #0
         objects.add(new ObjLoader(
                 Arrays.asList(
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
                 ),
                 new ArrayList<>(),
-                new Vector4f(1.0f,0.0f,0.0f,1.0f),
-                "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\ring outer field.obj"
+                new Vector4f(0.86f,0.86f,0.86f,1.0f),
+                "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\skybox.obj"
         ));
+//        main field #1
         objects.add(new ObjLoader(
+                Arrays.asList(
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f(0.0f,0.27f,0.35f,1.0f),
+                "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\main field.obj"
+        ));
+//        main tribun #2
+        objects.add(new ObjLoader(
+                Arrays.asList(
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f(0.5f,0.5f,0.5f,1.0f),
+                "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\stage.obj"
+        ));
+//        main chair #3
+        objects.add(new ObjLoader(
+                Arrays.asList(
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f(0.5f,0.02f,0.02f,1.0f),
+                "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\chair.obj"
+        ));
+//child main field #0#0
+        objects.get(0).getChildObject().add(new ObjLoader(
                 Arrays.asList(
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
@@ -66,7 +88,8 @@ public class Main {
                 new Vector4f(0.0f,0.0f,0.0f,1.0f),
                 "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\ring black.obj"
         ));
-        objects.add(new ObjLoader(
+        //child main field #0#1
+        objects.get(0).getChildObject().add(new ObjLoader(
                 Arrays.asList(
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
@@ -75,6 +98,18 @@ public class Main {
                 new Vector4f(1.0f,1.0f,1.0f,1.0f),
                 "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\backboard.obj"
         ));
+        //child main field #0#2
+        objects.get(0).getChildObject().add(new ObjLoader(
+                Arrays.asList(
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f(1.0f,0.0f,0.0f,1.0f),
+                "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\ring outer field.obj"
+        ));
+
+
     }
     public void input(){
         float move = 0.1f;
@@ -90,6 +125,14 @@ public class Main {
         if (window.isKeyPressed(GLFW_KEY_D)) {
             camera.moveRight(move);
         }
+
+        if (window.isKeyPressed(GLFW_KEY_UP)) {
+            camera.moveUp(move);
+        }
+        if (window.isKeyPressed(GLFW_KEY_DOWN)) {
+            camera.moveDown(move);
+        }
+
         if(mouseInput.isLeftButtonPressed()){
             Vector2f displayVec = window.getMouseInput().getDisplVec();
             camera.addRotation((float)Math.toRadians(displayVec.x * 0.1f),

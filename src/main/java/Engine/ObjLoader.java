@@ -123,15 +123,15 @@ public class ObjLoader extends Object{
                 3, GL_FLOAT,
                 false,
                 0, 0);
-//        uniformsMap.setUniform("lightColor", new Vector3f(1f,1f,1f));
-//        uniformsMap.setUniform("lightPos", new Vector3f(1f,1f,2f));
+        uniformsMap.setUniform("lightColor", new Vector3f(1f,1f,1f));
+        uniformsMap.setUniform("lightPos", new Vector3f(1f,1f,2f));
 
         //directional Light
-        uniformsMap.setUniform("dirLight.direction", new Vector3f(-0.2f,-1.0f,-0.3f));
-        uniformsMap.setUniform("dirLight.ambient", new Vector3f(0.05f,0.05f,0.05f));
-        uniformsMap.setUniform("dirLight.diffuse", new Vector3f(0.4f,0.4f,0.4f));
-        uniformsMap.setUniform("dirLight.specular", new Vector3f(0.5f,0.5f,0.5f));
-
-        uniformsMap.setUniform("viewPos",camera.getPosition());
+//        uniformsMap.setUniform("dirLight.direction", new Vector3f(-0.2f,-1.0f,-0.3f));
+//        uniformsMap.setUniform("dirLight.ambient", new Vector3f(0.05f,0.05f,0.05f));
+//        uniformsMap.setUniform("dirLight.diffuse", new Vector3f(0.4f,0.4f,0.4f));
+//        uniformsMap.setUniform("dirLight.specular", new Vector3f(0.5f,0.5f,0.5f));
+//
+//        uniformsMap.setUniform("viewPos",camera.getPosition());
     }
 }
