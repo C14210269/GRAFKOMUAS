@@ -26,9 +26,6 @@ public class Camera {
         recalculate();
     }
 
-    public Vector3f getPosition() {
-        return position;
-    }
 
     public Matrix4f getViewMatrix() {
         return viewMatrix;
@@ -81,10 +78,16 @@ public class Camera {
         position.set(x, y, z);
         recalculate();
     }
+    public Vector3f getPosition() {
+        return position;
+    }
 
     public void setRotation(float x, float y) {
         rotation.set(x, y);
         recalculate();
+    }
+    public Vector2f getRotation() {
+        return rotation;
     }
 
     public void setViewMatrix(Matrix4f viewMatrix) {

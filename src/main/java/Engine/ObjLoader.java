@@ -104,15 +104,13 @@ public class ObjLoader extends Object{
     public void setupVAOVBO(){
         //set vao
         super.setupVAOVBO();
+//        normal
         nbo = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, nbo);
-        //mengirim vertices ke shader
+        // vertices ke shader
         glBufferData(GL_ARRAY_BUFFER,
                 Utils.listoFloat(normals),
                 GL_STATIC_DRAW);
-
-//        uniformsMap.createUniform("lightColor");
-//        uniformsMap.createUniform("lightPos");
     }
 
     public void drawSetup(Camera camera, Projection projection){
@@ -129,16 +127,28 @@ public class ObjLoader extends Object{
 //directional Light
         uniformsMap.setUniform("dirLight.direction", new Vector3f(-0.2f,-1.0f,-0.3f));
         uniformsMap.setUniform("dirLight.ambient", new Vector3f(0.05f,0.05f,0.05f));
-        uniformsMap.setUniform("dirLight.diffuse", new Vector3f(0.4f,0.4f,0.4f));
+        uniformsMap.setUniform("dirLight.diffuse", new Vector3f(0.3f,0.3f,0.3f));
         uniformsMap.setUniform("dirLight.specular", new Vector3f(0.5f,0.5f,0.5f));
         //posisi pointLight
         Vector3f[] _pointLightPositions = {
-                new Vector3f(0.7f, 0.2f, 2.0f),
-                new Vector3f(2.3f, -3.3f, -4.0f),
-                new Vector3f(-4.0f, 2.0f, -12.0f),
-                new Vector3f(0.0f, 0.0f, -3.0f)
+                new Vector3f(0f,5f,22f),
+                new Vector3f(22f,5f,0f),
+                new Vector3f(12f,5f,0f),
+                new Vector3f(0f,5f,0f),
+                new Vector3f(-12f,5f,0f),
+                new Vector3f(-22f,5f,0f),
+                new Vector3f(0f,5f,-22f)
         };
         for(int i = 0;i< _pointLightPositions.length;i++){
+            if (i == 0 || i == _pointLightPositions.length-1){
+                uniformsMap.setUniform("pointLights["+ i +"].position",_pointLightPositions[i]);
+                uniformsMap.setUniform("pointLights["+ i +"].ambient", new Vector3f(0.5f,0.5f,0.5f));
+                uniformsMap.setUniform("pointLights["+ i +"].diffuse", new Vector3f(1.8f,1.8f,1.8f));
+                uniformsMap.setUniform("pointLights["+ i +"].specular", new Vector3f(1.0f,1.0f,1.0f));
+                uniformsMap.setUniform("pointLights["+ i +"].constant",1.0f );
+                uniformsMap.setUniform("pointLights["+ i +"].linear", 0.09f);
+                uniformsMap.setUniform("pointLights["+ i +"].quadratic", 0.032f);
+            }
             uniformsMap.setUniform("pointLights["+ i +"].position",_pointLightPositions[i]);
             uniformsMap.setUniform("pointLights["+ i +"].ambient", new Vector3f(0.05f,0.05f,0.05f));
             uniformsMap.setUniform("pointLights["+ i +"].diffuse", new Vector3f(0.8f,0.8f,0.8f));
@@ -146,12 +156,11 @@ public class ObjLoader extends Object{
             uniformsMap.setUniform("pointLights["+ i +"].constant",1.0f );
             uniformsMap.setUniform("pointLights["+ i +"].linear", 0.09f);
             uniformsMap.setUniform("pointLights["+ i +"].quadratic", 0.032f);
-
         }
 
         //spotlight
-        uniformsMap.setUniform("spotLight.position",camera.getPosition());
-        uniformsMap.setUniform("spotLight.direction",camera.getDirection());
+//        uniformsMap.setUniform("spotLight.position",camera.getPosition());
+        uniformsMap.setUniform("spotLight.direction",new Vector3f(0.0f,0.0f,0.0f));
         uniformsMap.setUniform("spotLight.ambient",new Vector3f(0.0f,0.0f,0.0f));
         uniformsMap.setUniform("spotLight.diffuse",new Vector3f(1.0f,1.0f,1.0f));
         uniformsMap.setUniform("spotLight.specular",new Vector3f(1.0f,1.0f,1.0f));

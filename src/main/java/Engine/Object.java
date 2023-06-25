@@ -26,7 +26,7 @@ public class Object extends ShaderProgram{
     public Matrix4f model;
 
     int vboColor;
-
+    public float rotate;
     List<Object> childObject;
     List<Float> centerPoint;
 
@@ -63,6 +63,7 @@ public class Object extends ShaderProgram{
 //                "projection");
 //        uniformsMap.createUniform(
 //                "view");
+
         this.color = color;
         model = new Matrix4f().identity();
         childObject = new ArrayList<>();
@@ -221,7 +222,7 @@ public class Object extends ShaderProgram{
     public void scaleObject(Float scaleX,Float scaleY,Float scaleZ){
         model = new Matrix4f().scale(scaleX,scaleY,scaleZ).mul(new Matrix4f(model));
         for(Object child:childObject){
-            child.translateObject(scaleX,scaleY,scaleZ);
+            child.scaleObject(scaleX,scaleY,scaleZ);
         }
     }
 

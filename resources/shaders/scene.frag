@@ -16,8 +16,7 @@
 //out vec4 frag_color;
 //// kalo in itu berharap masuk dari vert
 //
-//uniform vec3 lightColor;
-//uniform vec3 lightPos;
+
 //in vec3 Normal;
 //in vec3 FragPos;
 //
@@ -45,7 +44,6 @@
 //Directional Light
 struct DirLight{
     vec3 direction;
-
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
@@ -64,7 +62,7 @@ struct PointLight{
     vec3 specular;
 };
 
-#define NR_POINT_LIGHTS 4
+#define NR_POINT_LIGHTS 7
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 
 struct SpotLight{
@@ -82,10 +80,11 @@ struct SpotLight{
     float quadratic;
 };
 uniform SpotLight spotLight;
-
 out vec4 fragColor;
 uniform vec4 uni_color;
 
+//uniform vec3 lightColor;
+//uniform vec3 lightPos;
 uniform vec3 viewPos;
 
 in vec3 Normal;
@@ -107,12 +106,16 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir){
 }
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
+//    direction
     vec3 lightDir = normalize(light.position - fragPos);
     //diffuse shading
     float diff = max(dot(normal, lightDir), 0.0);
     //specular shading
+
     vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0),1000.0);
+    vec3 halfwayVec = normalize(viewDir+lightDir);
+//    float spec = pow(max(dot(viewDir, reflectDir), 0.0),3072.0);
+    float spec = pow(max(dot(normal, halfwayVec), 0.0),3072.0);
     //attenuation
     float distance    = length(light.position - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance +
