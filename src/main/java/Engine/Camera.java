@@ -94,4 +94,8 @@ public class Camera {
     public void rotate(float x, float y, Vector3f koor) {
         viewMatrix.translate(koor.x,koor.y,koor.z).rotateX(x).rotateY(y).translate(-koor.x,-koor.y,-koor.z);
     }
+
+    public Vector3f getDirection() {
+        return direction;
+    }
 }

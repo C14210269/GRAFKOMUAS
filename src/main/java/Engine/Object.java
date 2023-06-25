@@ -23,7 +23,7 @@ public class Object extends ShaderProgram{
     UniformsMap uniformsMap;
     Vector4f color;
 
-    Matrix4f model;
+    public Matrix4f model;
 
     int vboColor;
 

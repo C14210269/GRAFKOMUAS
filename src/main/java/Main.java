@@ -46,7 +46,7 @@ public class Main {
                 ),
                 new ArrayList<>(),
                 new Vector4f(0.86f,0.86f,0.86f,1.0f),
-                "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\skybox.obj"
+                "fixed res\\skybox.obj"
         ));
 //        main field #1
         objects.add(new ObjLoader(
@@ -56,28 +56,49 @@ public class Main {
                 ),
                 new ArrayList<>(),
                 new Vector4f(0.0f,0.27f,0.35f,1.0f),
-                "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\main field.obj"
+                "fixed res\\main field.obj"
         ));
-//        main tribun #2
+        //        ball #2
         objects.add(new ObjLoader(
                 Arrays.asList(
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
                 ),
                 new ArrayList<>(),
-                new Vector4f(0.5f,0.5f,0.5f,1.0f),
-                "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\stage.obj"
+                new Vector4f(1.0f,0.54f,0.0f,1.0f),
+                "fixed res\\basket.obj"
         ));
-//        main chair #3
-        objects.add(new ObjLoader(
+//        #4#1
+        objects.get(2).getChildObject().add(new ObjLoader(
                 Arrays.asList(
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
                 ),
                 new ArrayList<>(),
-                new Vector4f(0.5f,0.02f,0.02f,1.0f),
-                "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\chair.obj"
+                new Vector4f(0.0f,0.0f,0.0f,1.0f),
+                "fixed res\\basket line.obj"
         ));
+        objects.get(2).translateObject(0f,1f,0f);
+//        main tribun #3
+//        objects.add(new ObjLoader(
+//                Arrays.asList(
+//                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
+//                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
+//                ),
+//                new ArrayList<>(),
+//                new Vector4f(0.5f,0.5f,0.5f,1.0f),
+//                "fixed res\\stage.obj"
+//        ));
+////        main chair #4
+//        objects.add(new ObjLoader(
+//                Arrays.asList(
+//                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
+//                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
+//                ),
+//                new ArrayList<>(),
+//                new Vector4f(0.5f,0.02f,0.02f,1.0f),
+//                "fixed res\\chair.obj"
+//        ));
 //child main field #0#0
         objects.get(0).getChildObject().add(new ObjLoader(
                 Arrays.asList(
@@ -86,7 +107,7 @@ public class Main {
                 ),
                 new ArrayList<>(),
                 new Vector4f(0.0f,0.0f,0.0f,1.0f),
-                "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\ring black.obj"
+                "fixed res\\ring black.obj"
         ));
         //child main field #0#1
         objects.get(0).getChildObject().add(new ObjLoader(
@@ -96,7 +117,7 @@ public class Main {
                 ),
                 new ArrayList<>(),
                 new Vector4f(1.0f,1.0f,1.0f,1.0f),
-                "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\backboard.obj"
+                "fixed res\\backboard.obj"
         ));
         //child main field #0#2
         objects.get(0).getChildObject().add(new ObjLoader(
@@ -106,7 +127,7 @@ public class Main {
                 ),
                 new ArrayList<>(),
                 new Vector4f(1.0f,0.0f,0.0f,1.0f),
-                "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\ring outer field.obj"
+                "fixed res\\head ring.obj"
         ));
         //child main field #0#3
         objects.get(0).getChildObject().add(new ObjLoader(
@@ -116,23 +137,41 @@ public class Main {
                 ),
                 new ArrayList<>(),
                 new Vector4f(1.0f,1.0f,1.0f,1.0f),
-                "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\mesh.obj"
+                "fixed res\\mesh.obj"
         ));
+
         //coba texture
-        objects.add(new ObjLoader(
-                Arrays.asList(
-                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
-                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
-                ),
-                new ArrayList<>(),
-                new Vector4f(),
-                "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\coba texture.obj"
-        ));
+//        objects.add(new ObjLoader(
+//                Arrays.asList(
+//                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
+//                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
+//                ),
+//                new ArrayList<>(),
+//                new Vector4f(),
+//                "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\coba texture.obj"
+//        ));
 
 
     }
+
+    public void rotateObj() {
+        if (countDegree > 0) {
+            countDegree--;
+            camera.addRotation(0, (float) Math.toRadians(0.95));
+        }
+    }
+
+
     public void input(){
         float move = 0.1f;
+//        coba
+//        obj ball movement
+        if (window.isKeyPressed(GLFW_KEY_1)) {
+            Vector3f objectDir = new Vector3f(1.0f, 0.0f, 0.0f);
+            objects.get(2).model.transformDirection(objectDir, objectDir);
+            Vector3f translation = new Vector3f(objectDir).mul(0.1f);
+            objects.get(2).translateObject(translation.x/10, translation.y/10, translation.z/10);
+        }
         if (window.isKeyPressed(GLFW_KEY_W)) {
             camera.moveForward(move);
         }
@@ -145,23 +184,21 @@ public class Main {
         if (window.isKeyPressed(GLFW_KEY_D)) {
             camera.moveRight(move);
         }
-
+//
         if (window.isKeyPressed(GLFW_KEY_UP)) {
             camera.moveUp(move);
         }
         if (window.isKeyPressed(GLFW_KEY_DOWN)) {
             camera.moveDown(move);
         }
-
+//
         if(mouseInput.isLeftButtonPressed()){
             Vector2f displayVec = window.getMouseInput().getDisplVec();
             camera.addRotation((float)Math.toRadians(displayVec.x * 0.1f),
                     (float)Math.toRadians(displayVec.y * 0.1f));
         }
-        if(window.getMouseInput().getScroll().y != 0){
-            projection.setFOV(projection.getFOV()- (window.getMouseInput().getScroll().y*0.01f));
             window.getMouseInput().setScroll(new Vector2f());
-        }
+
     }
     public void loop(){
         while (window.isOpen()) {
@@ -176,6 +213,7 @@ public class Main {
             for(Object object: objects){
                 object.draw(camera,projection);
             }
+            rotateObj();
             glDisableVertexAttribArray(0);
 
             // Poll for window events.

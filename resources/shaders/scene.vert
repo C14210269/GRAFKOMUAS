@@ -28,3 +28,5 @@ void main(){
     FragPos = vec3(model * vec4(position, 1.0));
     Normal = normalize(model * vec4(normal, 1.0)).xyz;
 }
+
+//2
