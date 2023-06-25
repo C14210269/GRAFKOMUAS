@@ -12,7 +12,7 @@
 //    gl_Position = projection * view * model * vec4(position, 1.0);
 //}
 
-//shading 1
+//shading 1 & spotlight sama
 #version 330
 
 layout (location=0) in vec3 position;
@@ -29,4 +29,4 @@ void main(){
     Normal = normalize(model * vec4(normal, 1.0)).xyz;
 }
 
-//2
+//2 spotlight

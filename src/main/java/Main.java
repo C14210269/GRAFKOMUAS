@@ -21,10 +21,10 @@ public class Main {
     (1600,1400,"Hello World");
     private ArrayList<Object> objects
             = new ArrayList<>();
-    private ArrayList<Object> objectsRectangle
+    private ArrayList<Object> ball
             = new ArrayList<>();
 
-    private ArrayList<Object> objectsPointsControl
+    private ArrayList<Object> person
             = new ArrayList<>();
 
     private MouseInput mouseInput;
@@ -58,8 +58,8 @@ public class Main {
                 new Vector4f(0.0f,0.27f,0.35f,1.0f),
                 "fixed res\\main field.obj"
         ));
-        //        ball #2
-        objects.add(new ObjLoader(
+        //        ball #0
+        ball.add(new ObjLoader(
                 Arrays.asList(
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
@@ -69,7 +69,7 @@ public class Main {
                 "fixed res\\basket.obj"
         ));
 //        #4#1
-        objects.get(2).getChildObject().add(new ObjLoader(
+        ball.get(0).getChildObject().add(new ObjLoader(
                 Arrays.asList(
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
@@ -78,8 +78,8 @@ public class Main {
                 new Vector4f(0.0f,0.0f,0.0f,1.0f),
                 "fixed res\\basket line.obj"
         ));
-        objects.get(2).translateObject(0f,1f,0f);
-//        main tribun #3
+        ball.get(0).translateObject(0f,1f,0f);
+////        main tribun #3
 //        objects.add(new ObjLoader(
 //                Arrays.asList(
 //                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
@@ -139,6 +139,52 @@ public class Main {
                 new Vector4f(1.0f,1.0f,1.0f,1.0f),
                 "fixed res\\mesh.obj"
         ));
+        person.add(new ObjLoader(
+                Arrays.asList(
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f(0.016f,0.23f,0.36f,1.0f),
+                "fixed res\\LeBron James\\navy bron.obj"
+        ));
+        person.get(0).getChildObject().add(new ObjLoader(
+                Arrays.asList(
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f(0.63f,0.32f,0.18f,1.0f),
+                "fixed res\\LeBron James\\brown bron.obj"
+        ));
+        person.get(0).getChildObject().add(new ObjLoader(
+                Arrays.asList(
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f(1.0f,0.0f,0.0f,1.0f),
+                "fixed res\\LeBron James\\rad bron.obj"
+        ));
+        person.get(0).getChildObject().add(new ObjLoader(
+                Arrays.asList(
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f(1.0f,1.0f,1.0f,1.0f),
+                "fixed res\\LeBron James\\white bron.obj"
+        ));
+        person.get(0).getChildObject().add(new ObjLoader(
+                Arrays.asList(
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f(0.0f,0.0f,1.0f,1.0f),
+                "fixed res\\LeBron James\\blue bron.obj"
+        ));
+
 
         //coba texture
 //        objects.add(new ObjLoader(
@@ -168,9 +214,9 @@ public class Main {
 //        obj ball movement
         if (window.isKeyPressed(GLFW_KEY_1)) {
             Vector3f objectDir = new Vector3f(1.0f, 0.0f, 0.0f);
-            objects.get(2).model.transformDirection(objectDir, objectDir);
+            ball.get(0).model.transformDirection(objectDir, objectDir);
             Vector3f translation = new Vector3f(objectDir).mul(0.1f);
-            objects.get(2).translateObject(translation.x/10, translation.y/10, translation.z/10);
+            ball.get(0).translateObject(translation.x/10, translation.y/10, translation.z/10);
         }
         if (window.isKeyPressed(GLFW_KEY_W)) {
             camera.moveForward(move);
@@ -246,7 +292,13 @@ public class Main {
             for(Object object: objects){
                 object.draw(camera,projection);
             }
-            rotateObj();
+            for(Object b : ball){
+                b.draw(camera,projection);
+            }
+            for(Object p : person){
+                p.draw(camera,projection);
+            }
+//            rotateObj();
             glDisableVertexAttribArray(0);
 
             // Poll for window events.
