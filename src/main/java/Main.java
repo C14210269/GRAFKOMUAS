@@ -22,32 +22,28 @@ public class Main {
     ArrayList<Object> objects = new ArrayList<>();
     ArrayList<Object> ball = new ArrayList<>();
     ArrayList<Object> person = new ArrayList<>();
-    ArrayList<Object> lighthouse = new ArrayList<>();
 
     private MouseInput mouseInput;
     int countDegree = 0;
     static float rot = 0f;
     Projection projection = new Projection(window.getWidth(),window.getHeight());
 
-    Camera camera = new Camera();  //0
-    Camera freeCam = new Camera();
+    Camera camera = new Camera();
+    Camera freeCam = new Camera();//0
     Camera FPPcam = new Camera();  //1
     Camera TPPcam1 = new Camera();  //2
     Camera TPPcam2 = new Camera();  //3
 
-    float distanceCamera = 2f;
-    float angleAroundPlayer = 0;
+    float distancePerson = 5f;
+    float distanceBall = 2f;
+    float angleAroundPerson = 0;
+    float angleAroundBall = 0;
 
     Vector3f FPPpos= new Vector3f(0.0f, 4f, 0f);
     Vector3f TPPpos1 = new Vector3f(0f,5f,-5f);
-    Vector3f TPPpos2 = new Vector3f(0.f, 2f, -0.5f);
+    Vector3f TPPpos2 = new Vector3f(0.f, 2f, -2f);
 
-//    utk milih kamera mana yg dipake
     int obj=1, camMode=0;
-    boolean keyRditekan = false;
-    boolean follow = false;
-
-    float derajatkamera;
 
     public void init() throws IOException {
         window.init();
@@ -95,7 +91,7 @@ public class Main {
                 new Vector4f(0.0f,0.0f,0.0f,1.0f),
                 "fixed res\\stripe ball.obj"
         ));
-        ball.get(0).translateObject(1.1f,1.9f,-0.2f);
+        ball.get(0).translateObject(1.1f,1.8f,0.f);
         ball.get(0).scaleObject(0.8f,0.8f,0.8f);
 //        main tribun #2
         objects.add(new ObjLoader(
@@ -259,37 +255,30 @@ public class Main {
         ));
 
 //        cam setting
-        float angle=-10;
-        float theta = person.get(0).rotate + angleAroundPlayer;
-        float offsetX = (float) (distanceCamera * Math.sin(Math.toRadians(theta)));
-        float offsetZ = (float) (distanceCamera * Math.cos(Math.toRadians(theta)));
+        float thetaPerson = person.get(0).rotate + angleAroundPerson;
+        float thetaBall = ball.get(0).rotate + angleAroundBall;
+        float offsetXperson = (float) (distancePerson * Math.sin(Math.toRadians(thetaPerson)));
+        float offsetZperson = (float) (distancePerson * Math.cos(Math.toRadians(thetaPerson)));
+        float offsetXball = (float) (distanceBall * Math.sin(Math.toRadians(thetaBall)));
+        float offsetZball = (float) (distanceBall * Math.cos(Math.toRadians(thetaBall)));
+
 //        freecam
         freeCam.setPosition(-0.7f,1.8f,0.9f);
         freeCam.setRotation((float)Math.toRadians(0.0f),(float)Math.toRadians(-5.0f));
 //        FPP person
         FPPcam.setPosition(person.get(0).getCenterPoint().get(0) + FPPpos.x,person.get(0).getCenterPoint().get(1)+FPPpos.y,person.get(0).getCenterPoint().get(2)+FPPpos.z);
-        FPPcam.setRotation(0,0);
+        FPPcam.setRotation(0,(float) Math.toRadians(180));
 //        TPP person
-        TPPcam1.setRotation((float) Math.toRadians(angle), (float) Math.toRadians(180 - theta));
-        TPPcam1.setPosition(person.get(0).getCenterPoint().get(0)-offsetX, person.get(0).getCenterPoint().get(1) + TPPpos1.y, person.get(0).getCenterPoint().get(2)-offsetZ);
+        TPPcam1.setRotation(0f, (float) Math.toRadians(180 - thetaPerson));
+        TPPcam1.setPosition(person.get(0).getCenterPoint().get(0) - offsetXperson, person.get(0).getCenterPoint().get(1) + TPPpos1.y, person.get(0).getCenterPoint().get(2) - offsetZperson);
+//        TPP ball
+        TPPcam2.setRotation((float) Math.toRadians(10f), (float) Math.toRadians(180 - thetaBall));
+        TPPcam2.setPosition(ball.get(0).getCenterPoint().get(0)- offsetXball, ball.get(0).getCenterPoint().get(1) + TPPpos2.y, ball.get(0).getCenterPoint().get(2)- offsetZball);
 //        main
         camera.setPosition(0f,5f,-5f);
         camera.setRotation((float)Math.toRadians(20f),(float)Math.toRadians(180));
 //        camera.setPosition(freeCam.getPosition().get(0),freeCam.getPosition().get(1),freeCam.getPosition().get(2));
 //        camera.setRotation(freeCam.getRotation().x,freeCam.getRotation().y);
-
-
-
-        //coba texture
-//        objects.add(new ObjLoader(
-//                Arrays.asList(
-//                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
-//                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
-//                ),
-//                new ArrayList<>(),
-//                new Vector4f(),
-//                "C:\\Users\\Frenky\\Documents\\GitHub\\uasjuan\\GRAFKOMUAS\\coba texture.obj"
-//        ));
 
 
     }
@@ -306,85 +295,306 @@ public class Main {
         float move = 0.1f;
         float dx = (float) (move * Math.sin(Math.toRadians(person.get(0).rotate)));
         float dz = (float) (move * Math.cos(Math.toRadians(person.get(0).rotate)));
-        float theta = person.get(0).rotate + angleAroundPlayer;
-        float offsetX = (float) (distanceCamera * Math.sin(Math.toRadians(theta)));
-        float offsetZ = (float) (distanceCamera * Math.cos(Math.toRadians(theta)));
-        float offsetX1 = (float) (TPPpos1.x * Math.sin(Math.toRadians(theta)));
-        float offsetZ1 = (float) (TPPpos1.z * Math.cos(Math.toRadians(theta)));
+        float dxB = (float) (move * Math.sin(Math.toRadians(ball.get(0).rotate)));
+        float dyB = (float) (move * Math.tan(Math.toRadians(ball.get(0).rotate)));
+        float dzB = (float) (move * Math.cos(Math.toRadians(ball.get(0).rotate)));
+        float thetaPerson = person.get(0).rotate + angleAroundPerson;
+        float thetaBall = ball.get(0).rotate + angleAroundBall;
+        float offsetXperson = (float) (distancePerson * Math.sin(Math.toRadians(thetaPerson)));
+        float offsetZperson = (float) (distancePerson * Math.cos(Math.toRadians(thetaPerson)));
+        float offsetXball = (float) (distanceBall * Math.sin(Math.toRadians(thetaBall)));
+        float offsetZball = (float) (distanceBall * Math.cos(Math.toRadians(thetaBall)));
+        float offsetX1person = (float) (TPPpos1.x * Math.sin(Math.toRadians(thetaPerson)));
+        float offsetZ1person = (float) (TPPpos1.z * Math.cos(Math.toRadians(thetaPerson)));
 
 //        movement obj 1 -> lebron 0 free, 1 fpp, 2 tpp
-//        if (window.isKeyPressed(GLFW_KEY_W )&& obj == 1) {
-//            if (camMode == 0) camera.moveForward(move);
-//            else if (camMode == 1){
-////                FPP
-//
-////                TPP
-//                person.get(0).translateObject(dx, 0f, dz);
-//            }else if (camMode == 2){
-//
-//            }
-//        }
+        if (window.isKeyPressed(GLFW_KEY_W )) {
+            if (obj == 1) {
+                if (camMode == 2) {
+//            update TPP
+                    person.get(0).translateObject(dx, 0f, dz);
+//                if (!checkCollision()) {
+                    TPPcam1.setRotation(0f, (float) Math.toRadians(180 - thetaPerson));
+                    TPPcam1.setPosition(person.get(0).getCenterPoint().get(0) - offsetXperson, person.get(0).getCenterPoint().get(1) + TPPpos1.y, person.get(0).getCenterPoint().get(2) - offsetZperson);
+//            update FPP
+                    FPPcam.setPosition(person.get(0).getCenterPoint().get(0) - offsetX1person, person.get(0).getCenterPoint().get(1) + FPPpos.y, person.get(0).getCenterPoint().get(2) - offsetZ1person);
+//                } else {
+//                    person.get(0).translateObject(-dx, 0f, -dz);
+//                }
+                }
+
+//            if (!checkCollision()) {
+                if (camMode == 0) {
+                    camera.setRotation(freeCam.getRotation().x, freeCam.getRotation().y);
+                    camera.setPosition(freeCam.getPosition().x, freeCam.getPosition().y, freeCam.getPosition().z);
+                } else if (camMode == 1) {
+                    camera.setRotation(FPPcam.getRotation().x, FPPcam.getRotation().y);
+                    camera.setPosition(FPPcam.getPosition().x, FPPcam.getPosition().y, FPPcam.getPosition().z);
+                } else if (camMode == 2) {
+                    camera.setRotation(TPPcam1.getRotation().x, TPPcam1.getRotation().y);
+                    camera.setPosition(TPPcam1.getPosition().x, TPPcam1.getPosition().y, TPPcam1.getPosition().z);
+//                }
+                }
+            }else if (obj == 2) {
+                if (camMode == 3) {
+//            update TPP
+                    ball.get(0).translateObject(dxB, 0f, dzB);
+//                if (!checkCollision()) {
+                    TPPcam2.setRotation(0f, (float) Math.toRadians(180 - thetaBall));
+                    TPPcam2.setPosition(ball.get(0).getCenterPoint().get(0) - offsetXball, ball.get(0).getCenterPoint().get(1) + TPPpos2.y, ball.get(0).getCenterPoint().get(2) - offsetZball);
+//                } else {
+//                    person.get(0).translateObject(-dx, 0f, -dz);
+//                }
+                }
+
+//            if (!checkCollision()) {
+                if (camMode == 0) {
+                    camera.setRotation(freeCam.getRotation().x, freeCam.getRotation().y);
+                    camera.setPosition(freeCam.getPosition().x, freeCam.getPosition().y, freeCam.getPosition().z);
+                }  else if (camMode == 3) {
+                    camera.setRotation(TPPcam2.getRotation().x, TPPcam2.getRotation().y);
+                    camera.setPosition(TPPcam2.getPosition().x, TPPcam2.getPosition().y, TPPcam2.getPosition().z);
+//                }
+                }
+            }
+        } //W
+
+        if (window.isKeyPressed(GLFW_KEY_S )) {
+            if (obj == 1) {
+                if (camMode == 2) {
+//            update TPP
+                    person.get(0).translateObject(-dx, 0f, -dz);
+//                if (!checkCollision()) {
+                    TPPcam1.setRotation(0f, (float) Math.toRadians(180 - thetaPerson));
+                    TPPcam1.setPosition(person.get(0).getCenterPoint().get(0) - offsetXperson, person.get(0).getCenterPoint().get(1) + TPPpos1.y, person.get(0).getCenterPoint().get(2) - offsetZperson);
+//            update FPP
+                    FPPcam.setPosition(person.get(0).getCenterPoint().get(0) - offsetX1person, person.get(0).getCenterPoint().get(1) + FPPpos.y, person.get(0).getCenterPoint().get(2) - offsetZ1person);
+//                } else {
+//                    person.get(0).translateObject(-dx, 0f, -dz);
+//                }
+                }
+
+//            if (!checkCollision()) {
+                if (camMode == 0) {
+                    camera.setRotation(freeCam.getRotation().x, freeCam.getRotation().y);
+                    camera.setPosition(freeCam.getPosition().x, freeCam.getPosition().y, freeCam.getPosition().z);
+                } else if (camMode == 1) {
+                    camera.setRotation(FPPcam.getRotation().x, FPPcam.getRotation().y);
+                    camera.setPosition(FPPcam.getPosition().x, FPPcam.getPosition().y, FPPcam.getPosition().z);
+                } else if (camMode == 2) {
+                    camera.setRotation(TPPcam1.getRotation().x, TPPcam1.getRotation().y);
+                    camera.setPosition(TPPcam1.getPosition().x, TPPcam1.getPosition().y, TPPcam1.getPosition().z);
+//                }
+                }
+            }else if (obj == 2) {
+                if (camMode == 3) {
+//            update TPP
+                    ball.get(0).translateObject(-dxB, 0f, -dzB);
+//                if (!checkCollision()) {
+                    TPPcam2.setRotation(0f, (float) Math.toRadians(180 - thetaBall));
+                    TPPcam2.setPosition(ball.get(0).getCenterPoint().get(0) - offsetXball, ball.get(0).getCenterPoint().get(1) + TPPpos2.y, ball.get(0).getCenterPoint().get(2) - offsetZball);
+//                } else {
+//                    person.get(0).translateObject(-dx, 0f, -dz);
+//                }
+                }
+
+//            if (!checkCollision()) {
+                if (camMode == 0) {
+                    camera.setRotation(freeCam.getRotation().x, freeCam.getRotation().y);
+                    camera.setPosition(freeCam.getPosition().x, freeCam.getPosition().y, freeCam.getPosition().z);
+                }  else if (camMode == 3) {
+                    camera.setRotation(TPPcam2.getRotation().x, TPPcam2.getRotation().y);
+                    camera.setPosition(TPPcam2.getPosition().x, TPPcam2.getPosition().y, TPPcam2.getPosition().z);
+//                }
+                }
+            }
+        } //S
+
+        if (window.isKeyPressed(GLFW_KEY_A )) {
+            if (obj == 1) {
+                if (camMode == 2) {
+                    Vector3f currPos = new Vector3f(person.get(0).getCenterPoint().get(0), person.get(0).getCenterPoint().get(1), person.get(0).getCenterPoint().get(2));
+                    person.get(0).translateObject(-currPos.x,-currPos.y,-currPos.z);
+                    person.get(0).rotateObject((float)Math.toRadians(2),0f,1f,0f);
+                    person.get(0).rotate +=2;
+                    person.get(0).translateObject(currPos.x,currPos.y,currPos.z);
+
+                    //            update TPP
+                    TPPcam1.setRotation(0f, (float) Math.toRadians(180 - thetaPerson));
+                    TPPcam1.setPosition(person.get(0).getCenterPoint().get(0) - offsetXperson, person.get(0).getCenterPoint().get(1) + TPPpos1.y, person.get(0).getCenterPoint().get(2) - offsetZperson);
+//            update FPP
+                    FPPcam.addRotation(0,(float) Math.toRadians(-2));
+                    FPPcam.setPosition(person.get(0).getCenterPoint().get(0) - offsetX1person, person.get(0).getCenterPoint().get(1) + FPPpos.y, person.get(0).getCenterPoint().get(2) - offsetZ1person);
+//                } else {
+//                    person.get(0).translateObject(-dx, 0f, -dz);
+//                }
+                }
+
+//            if (!checkCollision()) {
+                if (camMode == 0) {
+                    camera.setRotation(freeCam.getRotation().x, freeCam.getRotation().y);
+                    camera.setPosition(freeCam.getPosition().x, freeCam.getPosition().y, freeCam.getPosition().z);
+                } else if (camMode == 1) {
+                    camera.setRotation(FPPcam.getRotation().x, FPPcam.getRotation().y);
+                    camera.setPosition(FPPcam.getPosition().x, FPPcam.getPosition().y, FPPcam.getPosition().z);
+                } else if (camMode == 2) {
+                    camera.setRotation(TPPcam1.getRotation().x, TPPcam1.getRotation().y);
+                    camera.setPosition(TPPcam1.getPosition().x, TPPcam1.getPosition().y, TPPcam1.getPosition().z);
+//                }
+                }
+            }else if (obj == 2) {
+                if (camMode == 3) {
+                    Vector3f currPos = new Vector3f(ball.get(0).getCenterPoint().get(0), ball.get(0).getCenterPoint().get(1), ball.get(0).getCenterPoint().get(2));
+                    ball.get(0).translateObject(-currPos.x,-currPos.y,-currPos.z);
+                    ball.get(0).rotateObject((float)Math.toRadians(2),0f,1f,0f);
+                    ball.get(0).rotate +=2;
+                    ball.get(0).translateObject(currPos.x,currPos.y,currPos.z);
+
+                    //            update TPP
+                    TPPcam2.setRotation(0f, (float) Math.toRadians(180 - thetaBall));
+                    TPPcam2.setPosition(ball.get(0).getCenterPoint().get(0) - offsetXball, ball.get(0).getCenterPoint().get(1) + TPPpos2.y, ball.get(0).getCenterPoint().get(2) - offsetZball);
+
+                }
+//            if (!checkCollision()) {
+                if (camMode == 0) {
+                    camera.setRotation(freeCam.getRotation().x, freeCam.getRotation().y);
+                    camera.setPosition(freeCam.getPosition().x, freeCam.getPosition().y, freeCam.getPosition().z);
+                }  else if (camMode == 3) {
+                    camera.setRotation(TPPcam2.getRotation().x, TPPcam2.getRotation().y);
+                    camera.setPosition(TPPcam2.getPosition().x, TPPcam2.getPosition().y, TPPcam2.getPosition().z);
+//                }
+                }
+            }
+        } //A
+
+        if (window.isKeyPressed(GLFW_KEY_D )) {
+            if (obj == 1) {
+                if (camMode == 2) {
+                    Vector3f currPos = new Vector3f(person.get(0).getCenterPoint().get(0), person.get(0).getCenterPoint().get(1), person.get(0).getCenterPoint().get(2));
+                    person.get(0).translateObject(-currPos.x,-currPos.y,-currPos.z);
+                    person.get(0).rotateObject((float)Math.toRadians(-2),0f,1f,0f);
+                    person.get(0).rotate -=2;
+                    person.get(0).translateObject(currPos.x,currPos.y,currPos.z);
+
+                    //            update TPP
+                    TPPcam1.setRotation(0f, (float) Math.toRadians(180 - thetaPerson));
+                    TPPcam1.setPosition(person.get(0).getCenterPoint().get(0) - offsetXperson, person.get(0).getCenterPoint().get(1) + TPPpos1.y, person.get(0).getCenterPoint().get(2) - offsetZperson);
+//            update FPP
+                    FPPcam.addRotation(0,(float) Math.toRadians(2));
+                    FPPcam.setPosition(person.get(0).getCenterPoint().get(0) - offsetX1person, person.get(0).getCenterPoint().get(1) + FPPpos.y, person.get(0).getCenterPoint().get(2) - offsetZ1person);
+//                } else {
+//                    person.get(0).translateObject(-dx, 0f, -dz);
+//                }
+                }
+
+//            if (!checkCollision()) {
+                if (camMode == 0) {
+                    camera.setRotation(freeCam.getRotation().x, freeCam.getRotation().y);
+                    camera.setPosition(freeCam.getPosition().x, freeCam.getPosition().y, freeCam.getPosition().z);
+                } else if (camMode == 1) {
+                    camera.setRotation(FPPcam.getRotation().x, FPPcam.getRotation().y);
+                    camera.setPosition(FPPcam.getPosition().x, FPPcam.getPosition().y, FPPcam.getPosition().z);
+                } else if (camMode == 2) {
+                    camera.setRotation(TPPcam1.getRotation().x, TPPcam1.getRotation().y);
+                    camera.setPosition(TPPcam1.getPosition().x, TPPcam1.getPosition().y, TPPcam1.getPosition().z);
+//                }
+                }
+            }else if (obj == 2) {
+                if (camMode == 3) {
+                    Vector3f currPos = new Vector3f(ball.get(0).getCenterPoint().get(0), ball.get(0).getCenterPoint().get(1), ball.get(0).getCenterPoint().get(2));
+                    ball.get(0).translateObject(-currPos.x,-currPos.y,-currPos.z);
+                    ball.get(0).rotateObject((float)Math.toRadians(-2),0f,1f,0f);
+                    ball.get(0).rotate -=2;
+                    ball.get(0).translateObject(currPos.x,currPos.y,currPos.z);
+
+                    //            update TPP
+                    TPPcam2.setRotation(0f, (float) Math.toRadians(180 - thetaBall));
+                    TPPcam2.setPosition(ball.get(0).getCenterPoint().get(0) - offsetXball, ball.get(0).getCenterPoint().get(1) + TPPpos2.y, ball.get(0).getCenterPoint().get(2) - offsetZball);
+
+                }
+//            if (!checkCollision()) {
+                if (camMode == 0) {
+                    camera.setRotation(freeCam.getRotation().x, freeCam.getRotation().y);
+                    camera.setPosition(freeCam.getPosition().x, freeCam.getPosition().y, freeCam.getPosition().z);
+                }  else if (camMode == 3) {
+                    camera.setRotation(TPPcam2.getRotation().x, TPPcam2.getRotation().y);
+                    camera.setPosition(TPPcam2.getPosition().x, TPPcam2.getPosition().y, TPPcam2.getPosition().z);
+//                }
+                }
+            }
+        }//D
+
+        if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
+            ball.get(0).translateObject(0f, 0.01f, 0f);
+        }
+        if (window.isKeyPressed(GLFW_KEY_LEFT_CONTROL)) {
+            ball.get(0).translateObject(0f, -0.01f, 0f);
+        }
+        if (window.isKeyPressed(GLFW_KEY_I)) {
+            ball.get(0).translateObject(0.01f, 0.0f, 0f);
+        }
+        if (window.isKeyPressed(GLFW_KEY_J)) {
+            ball.get(0).translateObject(0f, 0f, -0.01f);
+        }
+        if (window.isKeyPressed(GLFW_KEY_K)) {
+            ball.get(0).translateObject(-0.01f, 0.0f, 0f);
+        }
+        if (window.isKeyPressed(GLFW_KEY_L)) {
+            ball.get(0).translateObject(0f, 0.0f, 0.01f);
+        }
+
 
 //        cam modes
+//        free
         if (window.isKeyPressed(GLFW_KEY_0)) {
             camMode = 0;
             camera.setRotation(freeCam.getRotation().x, freeCam.getRotation().y);
             camera.setPosition(freeCam.getPosition().x, freeCam.getPosition().y, freeCam.getPosition().z);
         }
-
+//      fpp person
         if (window.isKeyPressed(GLFW_KEY_1)) {
             camMode = 1;
 //            System.out.println("1");
             camera.setRotation(FPPcam.getRotation().x, FPPcam.getRotation().y);
             camera.setPosition(FPPcam.getPosition().x, FPPcam.getPosition().y, FPPcam.getPosition().z);
         }
-
+//      tpp person
         if (window.isKeyPressed(GLFW_KEY_2)) {
             camMode = 2;
             camera.setRotation(TPPcam1.getRotation().x, TPPcam1.getRotation().y);
             camera.setPosition(TPPcam1.getPosition().x, TPPcam1.getPosition().y, TPPcam1.getPosition().z);
         }
+//        tpp ball
         if (window.isKeyPressed(GLFW_KEY_3)) {
             camMode = 3;
-            camera.setRotation(TPPcam1.getRotation().x, TPPcam1.getRotation().y);
-            camera.setPosition(TPPcam1.getPosition().x, TPPcam1.getPosition().y, TPPcam1.getPosition().z);
+            camera.setRotation(TPPcam2.getRotation().x, TPPcam2.getRotation().y);
+            camera.setPosition(TPPcam2.getPosition().x, TPPcam2.getPosition().y, TPPcam2.getPosition().z);
         }
 
 
-//        movement obj 2 -> bola 0 free, 3 tpp
-
-//        coba
-//        obj ball movement
-//        if (window.isKeyPressed(GLFW_KEY_1)) {
-//            Vector3f objectDir = new Vector3f(1.0f, 0.0f, 0.0f);
-//            ball.get(0).model.transformDirection(objectDir, objectDir);
-//            Vector3f translation = new Vector3f(objectDir).mul(0.1f);
-//            ball.get(0).translateObject(translation.x/10, translation.y/10, translation.z/10);
-//        }
-//        if (window.isKeyPressed(GLFW_KEY_2)) {
-//            Vector3f objectDir = new Vector3f(0.0f, 1.0f, 0.0f);
-//            ball.get(0).model.transformDirection(objectDir, objectDir);
-//            Vector3f translation = new Vector3f(objectDir).mul(0.1f);
-//            ball.get(0).translateObject(translation.x/10, translation.y/10, translation.z/10);
-//        }
-        if (window.isKeyPressed(GLFW_KEY_W)) {
-            camera.moveForward(move);
-        }
-        if (window.isKeyPressed(GLFW_KEY_S)) {
-            camera.moveBackwards(move);
-        }
-        if (window.isKeyPressed(GLFW_KEY_A)) {
-            camera.moveLeft(move);
-        }
-        if (window.isKeyPressed(GLFW_KEY_D)) {
-            camera.moveRight(move);
-        }
 //
         if (window.isKeyPressed(GLFW_KEY_UP)) {
-            camera.moveUp(move);
+            camera.moveForward(move);
         }
         if (window.isKeyPressed(GLFW_KEY_DOWN)) {
+            camera.moveBackwards(move);
+        }
+        if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
+            camera.moveRight(move);
+        }
+        if (window.isKeyPressed(GLFW_KEY_LEFT)) {
+            camera.moveLeft(move);
+        }
+        if (window.isKeyPressed(GLFW_KEY_RIGHT_SHIFT)) {
+            camera.moveUp(move);
+        }
+        if (window.isKeyPressed(GLFW_KEY_RIGHT_CONTROL)) {
             camera.moveDown(move);
+        }
+//        rotating cam
+        if (window.isKeyPressed(GLFW_KEY_R)){
+            camera.moveRight(move);
+            camera.addRotation( 0, -0.01f);
         }
 
 //      cam position
@@ -420,86 +630,19 @@ public class Main {
             camera.setPosition(48f,15f,30f);
             camera.setRotation(0.2f, -0.9f);
         }
+//      obj selection
+        if (window.isKeyPressed(GLFW_KEY_F11)) {
+            obj=1;
+        }
+        if (window.isKeyPressed(GLFW_KEY_F12)) {
+            obj=2;
+        }
 
 //      still need mouse tho :v
         if (window.getMouseInput().getScroll().y != 0) {
             projection.setFOV(projection.getFOV() - (window.getMouseInput().getScroll().y * 0.01f));
             window.getMouseInput().setScroll(new Vector2f());
         }
-
-
-        if (window.isKeyPressed(GLFW_KEY_R)) {
-            keyRditekan = true;
-//            for(float i = 0f; i < 360f; i += 0.5f) {
-//                List<Float> temp = new ArrayList<>(objects.get(0).getCenterPoint());
-//                camera.setPosition(temp.get(0) * -1, temp.get(1) * -1, camera.getPosition().z);
-//                camera.addRotation(0, (float) Math.toRadians(0.5f));
-//                camera.setPosition(temp.get(0) * 1, temp.get(1) * 1, camera.getPosition().z);
-//            }
-        }
-        if (window.isKeyPressed(GLFW_KEY_G)) {
-            keyRditekan = false;
-        }
-        float move2 = 0.5f;
-        if (keyRditekan) {
-            float posisiX = camera.getPosition().x;
-            float posisiY = camera.getPosition().y;
-            float posisiZ = camera.getPosition().z;
-            camera.setPosition(-posisiX, -posisiY, -posisiZ);
-            camera.addRotation(0.0f, (float) Math.toRadians(move2));
-            camera.setPosition(posisiX, posisiY, posisiZ);
-            derajatkamera += move2;
-//            if (derajatkamera >= 360.0f) {
-//                derajatkamera = 0f;
-//                keyRditekan = false;
-//            }
-        }
-
-        if (window.isKeyPressed(GLFW_KEY_J)) {
-            camera.moveForward(move);
-            camera.addRotation(0, (float) Math.toRadians(1f));
-            setRot(1f);
-            camera.moveBackwards(move);
-            camera.moveLeft(move);
-        }
-        if (window.isKeyPressed(GLFW_KEY_L)) {
-            camera.moveForward(move);
-            camera.addRotation(0, (float) Math.toRadians(-1f));
-            setRot(1f);
-            camera.moveBackwards(move);
-            camera.moveRight(move);
-        }
-
-        if (window.isKeyPressed(GLFW_KEY_I)) {
-            camera.moveForward(move);
-            camera.addRotation((float) Math.toRadians(1f),0);
-            setRot(1f);
-            camera.moveUp(move);
-            camera.moveBackwards(move);
-        }
-
-        if (window.isKeyPressed(GLFW_KEY_K)) {
-            camera.moveForward(move);
-            camera.addRotation((float) Math.toRadians(-1f),0);
-            setRot(1f);
-            camera.moveDown(move);
-            camera.moveBackwards(move);
-
-        }
-        if (window.isKeyPressed(GLFW_KEY_B)) {
-            camera.setPosition(objects.get(2).getCenterPoint().get(0), objects.get(2).getCenterPoint().get(1) + 1, objects.get(2).getCenterPoint().get(2));
-            camera.setRotation(0.2f, -1.55f);
-        }
-        if (window.isKeyPressed(GLFW_KEY_N)) {
-            follow = true;
-        }
-
-        if (window.isKeyPressed(GLFW_KEY_M)) {
-            follow = false;
-        }
-
-
-
         if(mouseInput.isLeftButtonPressed()){
             Vector2f displayVec = window.getMouseInput().getDisplVec();
             camera.addRotation((float)Math.toRadians(displayVec.x * 0.1f),
@@ -515,12 +658,7 @@ public class Main {
                     0.0f, 0.0f,
                     1.0f);
             GL.createCapabilities();
-//            System.out.println(camera.getPosition());
             input();
-            if (follow){
-                objects.get(2).setCenterPoint(camera.getPosition().get(0),camera.getPosition().get(1),camera.getPosition().get(2));
-                System.out.println(objects.get(2).getCenterPoint());
-            }
 
             //code
             for(Object object: objects){
@@ -532,7 +670,7 @@ public class Main {
             for(Object p : person){
                 p.draw(camera,projection);
             }
-//            rotateObj();
+            rotateObj();
             glDisableVertexAttribArray(0);
 
             // Poll for window events.
