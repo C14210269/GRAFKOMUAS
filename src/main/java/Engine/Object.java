@@ -46,6 +46,11 @@ public class Object extends ShaderProgram{
     public void setCenterPoint(List<Float> centerPoint) {
         this.centerPoint = centerPoint;
     }
+    public void setCenterPoint(Float x, Float y, Float z) {
+//        this.centerPoint.set(0, x);
+        this.centerPoint.set(1, y);
+        this.centerPoint.set(2, z);
+    }
 
     List<Vector3f> verticesColor;
     public Object(List<ShaderModuleData> shaderModuleDataList

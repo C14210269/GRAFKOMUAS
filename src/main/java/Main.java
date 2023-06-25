@@ -26,7 +26,9 @@ public class Main {
 
     private MouseInput mouseInput;
     int countDegree = 0;
+    static float rot = 0f;
     Projection projection = new Projection(window.getWidth(),window.getHeight());
+
     Camera camera = new Camera();  //0
     Camera freeCam = new Camera();
     Camera FPPcam = new Camera();  //1
@@ -42,6 +44,10 @@ public class Main {
 
 //    utk milih kamera mana yg dipake
     int obj=1, camMode=0;
+    boolean keyRditekan = false;
+    boolean follow = false;
+
+    float derajatkamera;
 
     public void init() throws IOException {
         window.init();
@@ -414,11 +420,85 @@ public class Main {
             camera.setPosition(48f,15f,30f);
             camera.setRotation(0.2f, -0.9f);
         }
+
 //      still need mouse tho :v
         if (window.getMouseInput().getScroll().y != 0) {
             projection.setFOV(projection.getFOV() - (window.getMouseInput().getScroll().y * 0.01f));
             window.getMouseInput().setScroll(new Vector2f());
         }
+
+
+        if (window.isKeyPressed(GLFW_KEY_R)) {
+            keyRditekan = true;
+//            for(float i = 0f; i < 360f; i += 0.5f) {
+//                List<Float> temp = new ArrayList<>(objects.get(0).getCenterPoint());
+//                camera.setPosition(temp.get(0) * -1, temp.get(1) * -1, camera.getPosition().z);
+//                camera.addRotation(0, (float) Math.toRadians(0.5f));
+//                camera.setPosition(temp.get(0) * 1, temp.get(1) * 1, camera.getPosition().z);
+//            }
+        }
+        if (window.isKeyPressed(GLFW_KEY_G)) {
+            keyRditekan = false;
+        }
+        float move2 = 0.5f;
+        if (keyRditekan) {
+            float posisiX = camera.getPosition().x;
+            float posisiY = camera.getPosition().y;
+            float posisiZ = camera.getPosition().z;
+            camera.setPosition(-posisiX, -posisiY, -posisiZ);
+            camera.addRotation(0.0f, (float) Math.toRadians(move2));
+            camera.setPosition(posisiX, posisiY, posisiZ);
+            derajatkamera += move2;
+//            if (derajatkamera >= 360.0f) {
+//                derajatkamera = 0f;
+//                keyRditekan = false;
+//            }
+        }
+
+        if (window.isKeyPressed(GLFW_KEY_J)) {
+            camera.moveForward(move);
+            camera.addRotation(0, (float) Math.toRadians(1f));
+            setRot(1f);
+            camera.moveBackwards(move);
+            camera.moveLeft(move);
+        }
+        if (window.isKeyPressed(GLFW_KEY_L)) {
+            camera.moveForward(move);
+            camera.addRotation(0, (float) Math.toRadians(-1f));
+            setRot(1f);
+            camera.moveBackwards(move);
+            camera.moveRight(move);
+        }
+
+        if (window.isKeyPressed(GLFW_KEY_I)) {
+            camera.moveForward(move);
+            camera.addRotation((float) Math.toRadians(1f),0);
+            setRot(1f);
+            camera.moveUp(move);
+            camera.moveBackwards(move);
+        }
+
+        if (window.isKeyPressed(GLFW_KEY_K)) {
+            camera.moveForward(move);
+            camera.addRotation((float) Math.toRadians(-1f),0);
+            setRot(1f);
+            camera.moveDown(move);
+            camera.moveBackwards(move);
+
+        }
+        if (window.isKeyPressed(GLFW_KEY_B)) {
+            camera.setPosition(objects.get(2).getCenterPoint().get(0), objects.get(2).getCenterPoint().get(1) + 1, objects.get(2).getCenterPoint().get(2));
+            camera.setRotation(0.2f, -1.55f);
+        }
+        if (window.isKeyPressed(GLFW_KEY_N)) {
+            follow = true;
+        }
+
+        if (window.isKeyPressed(GLFW_KEY_M)) {
+            follow = false;
+        }
+
+
 
         if(mouseInput.isLeftButtonPressed()){
             Vector2f displayVec = window.getMouseInput().getDisplVec();
@@ -435,7 +515,12 @@ public class Main {
                     0.0f, 0.0f,
                     1.0f);
             GL.createCapabilities();
+//            System.out.println(camera.getPosition());
             input();
+            if (follow){
+                objects.get(2).setCenterPoint(camera.getPosition().get(0),camera.getPosition().get(1),camera.getPosition().get(2));
+                System.out.println(objects.get(2).getCenterPoint());
+            }
 
             //code
             for(Object object: objects){
@@ -465,6 +550,14 @@ public class Main {
         // free the error callback
         glfwTerminate();
         glfwSetErrorCallback(null).free();
+    }
+
+    public static float getRot() {
+        return rot;
+    }
+
+    public static void setRot(float rot) {
+        Main.rot += rot;
     }
     public static void main(String[] args) throws IOException {
         new Main().run();
