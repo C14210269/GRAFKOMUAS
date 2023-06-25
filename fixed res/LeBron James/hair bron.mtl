@@ -1,17 +1,7 @@
 # Blender 3.5.0 MTL File: 'untitled.blend'
 # www.blender.org
 
-newmtl basketballer_1
-Ns 96.078453
-Ka 1.000000 1.000000 1.000000
-Ks 0.000000 0.000000 0.000000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 1
-map_Kd Mobile - Looney Tunes World of Mayhem - LeBron James/LeBron James/basketballer_1.png
-
-newmtl basketballer_eye
+newmtl basketballer_eye.001
 Ns 96.078453
 Ka 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -21,7 +11,7 @@ d 1.000000
 illum 1
 map_Kd Mobile - Looney Tunes World of Mayhem - LeBron James/LeBron James/basketballer_eye.png
 
-newmtl basketballer_head
+newmtl basketballer_head.001
 Ns 96.078453
 Ka 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000

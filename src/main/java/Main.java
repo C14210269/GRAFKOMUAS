@@ -139,6 +139,7 @@ public class Main {
                 new Vector4f(1.0f,1.0f,1.0f,1.0f),
                 "fixed res\\mesh.obj"
         ));
+//        person #0
         person.add(new ObjLoader(
                 Arrays.asList(
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
@@ -148,6 +149,7 @@ public class Main {
                 new Vector4f(0.016f,0.23f,0.36f,1.0f),
                 "fixed res\\LeBron James\\navy bron.obj"
         ));
+        //        person #0#0
         person.get(0).getChildObject().add(new ObjLoader(
                 Arrays.asList(
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
@@ -155,8 +157,9 @@ public class Main {
                 ),
                 new ArrayList<>(),
                 new Vector4f(0.63f,0.32f,0.18f,1.0f),
-                "fixed res\\LeBron James\\brown bron.obj"
+                "fixed res\\LeBron James\\body bron.obj"
         ));
+        //        person #0#1
         person.get(0).getChildObject().add(new ObjLoader(
                 Arrays.asList(
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
@@ -164,8 +167,9 @@ public class Main {
                 ),
                 new ArrayList<>(),
                 new Vector4f(1.0f,0.0f,0.0f,1.0f),
-                "fixed res\\LeBron James\\rad bron.obj"
+                "fixed res\\LeBron James\\red bron.obj"
         ));
+        //        person #0#2
         person.get(0).getChildObject().add(new ObjLoader(
                 Arrays.asList(
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
@@ -175,6 +179,7 @@ public class Main {
                 new Vector4f(1.0f,1.0f,1.0f,1.0f),
                 "fixed res\\LeBron James\\white bron.obj"
         ));
+        //        person #0#3
         person.get(0).getChildObject().add(new ObjLoader(
                 Arrays.asList(
                         new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
@@ -184,6 +189,48 @@ public class Main {
                 new Vector4f(0.0f,0.0f,1.0f,1.0f),
                 "fixed res\\LeBron James\\blue bron.obj"
         ));
+        //        person #0#4
+        person.get(0).getChildObject().add(new ObjLoader(
+                Arrays.asList(
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f(0.63f,0.32f,0.18f,1.0f),
+                "fixed res\\LeBron James\\face bron.obj"
+        ));
+        //        person #0#5
+        person.get(0).getChildObject().add(new ObjLoader(
+                Arrays.asList(
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f(0.0f,0.0f,0.0f,1.0f),
+                "fixed res\\LeBron James\\hair bron.obj"
+        ));
+        //        person #0#6
+        person.get(0).getChildObject().add(new ObjLoader(
+                Arrays.asList(
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f(1.0f,1.0f,1.0f,1.0f),
+                "fixed res\\LeBron James\\teeth eye bron.obj"
+        ));
+        //        person #0#7
+        person.get(0).getChildObject().add(new ObjLoader(
+                Arrays.asList(
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.vert", GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData("resources/shaders/scene.frag", GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f(0.49f,0.24f,0.2f,1.0f),
+                "fixed res\\LeBron James\\lips bron.obj"
+        ));
+
+
 
 
         //coba texture
@@ -214,6 +261,12 @@ public class Main {
 //        obj ball movement
         if (window.isKeyPressed(GLFW_KEY_1)) {
             Vector3f objectDir = new Vector3f(1.0f, 0.0f, 0.0f);
+            ball.get(0).model.transformDirection(objectDir, objectDir);
+            Vector3f translation = new Vector3f(objectDir).mul(0.1f);
+            ball.get(0).translateObject(translation.x/10, translation.y/10, translation.z/10);
+        }
+        if (window.isKeyPressed(GLFW_KEY_2)) {
+            Vector3f objectDir = new Vector3f(0.0f, 1.0f, 0.0f);
             ball.get(0).model.transformDirection(objectDir, objectDir);
             Vector3f translation = new Vector3f(objectDir).mul(0.1f);
             ball.get(0).translateObject(translation.x/10, translation.y/10, translation.z/10);
