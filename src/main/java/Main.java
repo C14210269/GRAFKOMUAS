@@ -191,6 +191,39 @@ public class Main {
         if (window.isKeyPressed(GLFW_KEY_DOWN)) {
             camera.moveDown(move);
         }
+
+        if (window.isKeyPressed(GLFW_KEY_1)) {
+            camera.setPosition(48f,15f,0f);
+            camera.setRotation(0.2f, -1.55f);
+        }
+        if (window.isKeyPressed(GLFW_KEY_2)) {
+            camera.setPosition(48f,15f,-30f);
+            camera.setRotation(0.2f, -2.2f);
+        }
+        if (window.isKeyPressed(GLFW_KEY_3)) {
+            camera.setPosition(0.0f,15f,-30f);
+            camera.setRotation(0.2f, -3.1f);
+        }
+        if (window.isKeyPressed(GLFW_KEY_4)) {
+            camera.setPosition(-48f,15f,-30f);
+            camera.setRotation(0.2f, -4.0f);
+        }
+        if (window.isKeyPressed(GLFW_KEY_5)) {
+            camera.setPosition(-48f,15f,0f);
+            camera.setRotation(0.2f, 1.55f);
+        }
+        if (window.isKeyPressed(GLFW_KEY_6)) {
+            camera.setPosition(-48f, 15f, 30f);
+            camera.setRotation(0.2f, 0.9f);
+        }
+        if (window.isKeyPressed(GLFW_KEY_7)) {
+            camera.setPosition(0.0f,15f,30f);
+            camera.setRotation(0.2f, 0.0f);
+        }
+        if (window.isKeyPressed(GLFW_KEY_8)) {
+            camera.setPosition(48f,15f,30f);
+            camera.setRotation(0.2f, -0.9f);
+        }
 //
         if(mouseInput.isLeftButtonPressed()){
             Vector2f displayVec = window.getMouseInput().getDisplVec();
