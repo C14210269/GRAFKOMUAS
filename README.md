@@ -8,4 +8,4 @@ Link Laporan :
 https://docs.google.com/document/d/1s4haKlfcrCIBAiO5Pd7tFPfT_miEcDR9hPsWE1XvQB4/edit?usp=sharing
 
 Link Video Demo :
-https://youtu.be/K_EWSK-KzWU
+https://youtu.be/q-nde_Kr0Tk
