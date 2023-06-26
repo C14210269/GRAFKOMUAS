@@ -18,7 +18,7 @@ import static org.lwjgl.opengl.GL30.*;
 public class Main {
     private Window window =
             new Window
-    (1600,1400,"Hello World");
+                    (1600,1400,"Hello World");
     ArrayList<Object> objects = new ArrayList<>();
     ArrayList<Object> ball = new ArrayList<>();
     ArrayList<Object> person = new ArrayList<>();
@@ -43,7 +43,7 @@ public class Main {
     Vector3f TPPpos1 = new Vector3f(0f,5f,-5f);
     Vector3f TPPpos2 = new Vector3f(0.f, 2f, -2f);
 
-    int obj=1, camMode=0;
+    int obj=3, camMode=0;
 
     public void init() throws IOException {
         window.init();
@@ -91,7 +91,7 @@ public class Main {
                 new Vector4f(0.0f,0.0f,0.0f,1.0f),
                 "fixed res\\stripe ball.obj"
         ));
-        ball.get(0).translateObject(1.1f,1.8f,0.f);
+        ball.get(0).translateObject(2.5f,1.9f,-0.2f);
         ball.get(0).scaleObject(0.8f,0.8f,0.8f);
 //        main tribun #2
         objects.add(new ObjLoader(
@@ -277,9 +277,6 @@ public class Main {
 //        main
         camera.setPosition(0f,5f,-5f);
         camera.setRotation((float)Math.toRadians(20f),(float)Math.toRadians(180));
-//        camera.setPosition(freeCam.getPosition().get(0),freeCam.getPosition().get(1),freeCam.getPosition().get(2));
-//        camera.setRotation(freeCam.getRotation().x,freeCam.getRotation().y);
-
 
     }
 
@@ -310,7 +307,7 @@ public class Main {
 //        movement obj 1 -> lebron 0 free, 1 fpp, 2 tpp
         if (window.isKeyPressed(GLFW_KEY_W )) {
             if (obj == 1) {
-                if (camMode == 2) {
+                if (camMode == 2|| camMode ==1) {
 //            update TPP
                     person.get(0).translateObject(dx, 0f, dz);
 //                if (!checkCollision()) {
@@ -361,7 +358,7 @@ public class Main {
 
         if (window.isKeyPressed(GLFW_KEY_S )) {
             if (obj == 1) {
-                if (camMode == 2) {
+                if (camMode == 2 || camMode ==1) {
 //            update TPP
                     person.get(0).translateObject(-dx, 0f, -dz);
 //                if (!checkCollision()) {
@@ -412,7 +409,7 @@ public class Main {
 
         if (window.isKeyPressed(GLFW_KEY_A )) {
             if (obj == 1) {
-                if (camMode == 2) {
+                if (camMode == 2|| camMode ==1) {
                     Vector3f currPos = new Vector3f(person.get(0).getCenterPoint().get(0), person.get(0).getCenterPoint().get(1), person.get(0).getCenterPoint().get(2));
                     person.get(0).translateObject(-currPos.x,-currPos.y,-currPos.z);
                     person.get(0).rotateObject((float)Math.toRadians(2),0f,1f,0f);
@@ -455,6 +452,7 @@ public class Main {
                     TPPcam2.setPosition(ball.get(0).getCenterPoint().get(0) - offsetXball, ball.get(0).getCenterPoint().get(1) + TPPpos2.y, ball.get(0).getCenterPoint().get(2) - offsetZball);
 
                 }
+
 //            if (!checkCollision()) {
                 if (camMode == 0) {
                     camera.setRotation(freeCam.getRotation().x, freeCam.getRotation().y);
@@ -469,7 +467,7 @@ public class Main {
 
         if (window.isKeyPressed(GLFW_KEY_D )) {
             if (obj == 1) {
-                if (camMode == 2) {
+                if (camMode == 2|| camMode ==1) {
                     Vector3f currPos = new Vector3f(person.get(0).getCenterPoint().get(0), person.get(0).getCenterPoint().get(1), person.get(0).getCenterPoint().get(2));
                     person.get(0).translateObject(-currPos.x,-currPos.y,-currPos.z);
                     person.get(0).rotateObject((float)Math.toRadians(-2),0f,1f,0f);
@@ -524,23 +522,59 @@ public class Main {
             }
         }//D
 
+        Vector3f ballpos = new Vector3f(ball.get(0).model.transformPosition(new Vector3f(0f,0f,0f)));
         if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
             ball.get(0).translateObject(0f, 0.01f, 0f);
+            System.out.println("UPPAGE key FALSE collision=========================");// Move the object upward
+            if (ball.get(0).checkCollision(objects.get(0).getChildObject())|| ball.get(0).checkCollision(objects.get(0).getChildObject().get(0).getChildObject())) {
+                ball.get(0).translateObject(0.0f, -0.01f, 0.0f);    // Move the object upward
+                System.out.println("movement testt ---------------");
+            }
         }
         if (window.isKeyPressed(GLFW_KEY_LEFT_CONTROL)) {
             ball.get(0).translateObject(0f, -0.01f, 0f);
+            if (ball.get(0).checkCollision(objects.get(0).getChildObject().get(0).getChildObject())|| ball.get(0).checkCollision(objects.get(0).getChildObject().get(0).getChildObject()) || ballpos.y <= -0.4f) {
+                ball.get(0).translateObject(0.0f, 0.01f, 0.0f);   // Move the object downward
+
+                System.out.println("movement testt ---------------");
+
+            }
         }
         if (window.isKeyPressed(GLFW_KEY_I)) {
-            ball.get(0).translateObject(0.01f, 0.0f, 0f);
+
+            ball.get(0).translateObject(0f, 0.0f, 0.01f);
+            System.out.println("FALSE up key collision=========================");
+            if (ball.get(0).checkCollision(objects.get(0).getChildObject())|| ball.get(0).checkCollision(objects.get(0).getChildObject().get(0).getChildObject())) {
+                ball.get(0).translateObject(0.0f, 0.0f, -0.01f);
+                System.out.println("up key TRUE collision=========================");
+            }
         }
         if (window.isKeyPressed(GLFW_KEY_J)) {
-            ball.get(0).translateObject(0f, 0f, -0.01f);
+
+            ball.get(0).translateObject(0.01f, 0.0f, 0f);
+            System.out.println("FALSE left key collision=========================");
+            if (ball.get(0).checkCollision(objects.get(0).getChildObject()) || ball.get(0).checkCollision(objects.get(0).getChildObject().get(2).getChildObject())|| ball.get(0).checkCollision(objects.get(0).getChildObject().get(0).getChildObject())) {
+                ball.get(0).translateObject(-0.01f, 0.0f, 0.0f);   // Move the object to the left
+                System.out.println("left key TRUE collision=========================");
+            }
+
         }
         if (window.isKeyPressed(GLFW_KEY_K)) {
-            ball.get(0).translateObject(-0.01f, 0.0f, 0f);
+            ball.get(0).translateObject(0f, 0f, -0.01f);
+            System.out.println("down key  FALSE  collision=========================");
+            if (ball.get(0).checkCollision(objects.get(0).getChildObject())|| ball.get(0).checkCollision(objects.get(0).getChildObject().get(0).getChildObject())) {
+                ball.get(0).translateObject(0.0f, 0.0f, 0.01f);
+                System.out.println("down key TRUE collision=========================");
+            }
         }
         if (window.isKeyPressed(GLFW_KEY_L)) {
-            ball.get(0).translateObject(0f, 0.0f, 0.01f);
+            ball.get(0).translateObject(-0.01f, 0.0f, 0f);
+            System.out.println("FALSE right key collision=========================");
+            if (ball.get(0).checkCollision(objects.get(0).getChildObject())|| ball.get(0).checkCollision(objects.get(0).getChildObject().get(0).getChildObject())) {
+                ball.get(0).translateObject(0.01f, 0.0f, 0.0f);    // Move the object to the right
+                System.out.println("up RIGHT TRUE collision=========================");
+            }
+
         }
 
 
@@ -572,7 +606,7 @@ public class Main {
         }
 
 
-//
+//  cam movement
         if (window.isKeyPressed(GLFW_KEY_UP)) {
             camera.moveForward(move);
         }
@@ -590,6 +624,12 @@ public class Main {
         }
         if (window.isKeyPressed(GLFW_KEY_RIGHT_CONTROL)) {
             camera.moveDown(move);
+        }
+        if (window.isKeyPressed(GLFW_KEY_SEMICOLON)) {
+            camera.addRotation( 0, 0.01f);
+        }
+        if (window.isKeyPressed(GLFW_KEY_COMMA)) {
+            camera.addRotation( 0, -0.01f);
         }
 //        rotating cam
         if (window.isKeyPressed(GLFW_KEY_R)){
@@ -648,7 +688,7 @@ public class Main {
             camera.addRotation((float)Math.toRadians(displayVec.x * 0.1f),
                     (float)Math.toRadians(displayVec.y * 0.1f));
         }
-            window.getMouseInput().setScroll(new Vector2f());
+        window.getMouseInput().setScroll(new Vector2f());
 
     }
     public void loop(){

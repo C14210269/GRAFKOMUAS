@@ -231,4 +231,33 @@ public class Object extends ShaderProgram{
         }
     }
 
+//    collision detection
+    public float getBoundingRadius() {
+
+        return 1.25f;
+    }
+    public boolean checkCollision(List<Object> other) {
+
+        Vector3f thisPosition = new Vector3f(this.getCenterPoint().get(0),this.getCenterPoint().get(1),this.getCenterPoint().get(2));
+        System.out.println("===========================================");
+
+        for(Object object: other){
+            Vector3f otherPosition = new Vector3f(object.getCenterPoint().get(0),object.getCenterPoint().get(1),object.getCenterPoint().get(2));
+
+            float distance = thisPosition.distance(otherPosition);
+
+            System.out.println(otherPosition);
+            System.out.println(distance);
+            System.out.println("");
+
+            if (distance < (this.getBoundingRadius() + object.getBoundingRadius())) {
+                return true;
+            }
+
+        }
+        System.out.println("===========================================");
+
+        return false;
+    }
+
 }
